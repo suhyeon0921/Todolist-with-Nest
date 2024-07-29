@@ -6,7 +6,7 @@ import {
 import { Prisma, User } from '@prisma/client';
 import * as bcrypt from 'bcryptjs';
 import { UserRepository } from './repository/user.repository';
-import { JwtPayload, JwtToken } from '../common/type/jwt';
+import { JwtPayload, JwtToken } from '../common/type/jwt.type';
 import { generateToken, verifyToken } from '../common/util/jwt';
 import { RequestSignupDto } from './dto/request-signup.dto';
 

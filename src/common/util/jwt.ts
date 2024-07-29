@@ -1,7 +1,7 @@
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { UnauthorizedException } from '@nestjs/common';
-import { JwtPayload } from '../type/jwt';
+import { JwtPayload } from '../type/jwt.type';
 
 const jwtService: JwtService = new JwtService({});
 const configService: ConfigService = new ConfigService();

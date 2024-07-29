@@ -5,7 +5,7 @@ import { User } from './entity/user.entity';
 import { RequestSignupDto } from './dto/request-signup.dto';
 import { RequestLoginDto } from './dto/request-login.dto';
 import { RequestRefreshAccessTokenDto } from './dto/request-refresh-access-token.dto';
-import { JwtToken } from '../common/type/jwt';
+import { JwtToken } from '../common/type/jwt.type';
 
 @Resolver()
 export class UserResolver {
