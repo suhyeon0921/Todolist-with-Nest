@@ -10,9 +10,9 @@ export class TaskService {
 
   /** 태스크 전체 조회 */
   public async getTasks(userId: number): Promise<Task[]> {
-    const tasks = this.taskRepository.findTasksByUserId(userId);
+    const tasks = await this.taskRepository.findTasksByUserId(userId);
 
-    if (!tasks) {
+    if (!tasks || tasks.length === 0) {
       throw new CustomError('error', '태스크를 찾을 수 없습니다.');
     }
 
