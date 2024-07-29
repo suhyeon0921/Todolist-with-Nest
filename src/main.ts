@@ -11,6 +11,7 @@ interface Context extends YogaInitialContext {
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  await app.init();
 
   const graphqlSchemaHost = app.get(GraphQLSchemaHost);
   const { schema } = graphqlSchemaHost;
