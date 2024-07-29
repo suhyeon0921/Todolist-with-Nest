@@ -41,11 +41,13 @@ export class UserResolver {
     context.res.cookie('accessToken', accessToken, {
       httpOnly: true,
       maxAge: 60 * 60 * 1000, // 1 hour
+      domain: 'localhost',
     });
 
     context.res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      domain: 'localhost',
     });
 
     return { accessToken, refreshToken };
@@ -63,6 +65,7 @@ export class UserResolver {
     context.res.cookie('accessToken', accessToken, {
       httpOnly: true,
       maxAge: 60 * 60 * 1000, // 1 hour
+      domain: 'localhost',
     });
 
     return { accessToken };
