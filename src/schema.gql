@@ -24,14 +24,37 @@ type JwtToken {
   refreshToken: String
 }
 
+type Task {
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+  id: Int!
+  content: String!
+  isDone: Boolean!
+  user: User
+  userId: Int
+}
+
+type TaskCountDto {
+  completedTaskCount: Int!
+  totalTaskCount: Int!
+}
+
 type Query {
   getAllUsers: [User!]!
+  tasks: [Task!]!
+  taskCount: TaskCountDto!
 }
 
 type Mutation {
   signup(data: RequestSignupDto!): User!
   login(data: RequestLoginDto!): JwtToken!
   refresh(data: RequestRefreshAccessTokenDto!): JwtToken!
+  createTask(data: RequestTaskDto!): Task!
+  updateTask(data: RequestUpdateTaskDto!): Task!
+  deleteTask(data: TaskIdDto!): Task!
+  completeTask(data: TaskIdDto!): Task!
+  uncompleteTask(data: TaskIdDto!): Task!
 }
 
 input RequestSignupDto {
@@ -50,4 +73,17 @@ input RequestLoginDto {
 
 input RequestRefreshAccessTokenDto {
   refreshToken: String!
+}
+
+input RequestTaskDto {
+  content: String!
+}
+
+input RequestUpdateTaskDto {
+  id: Int!
+  content: String!
+}
+
+input TaskIdDto {
+  id: Int!
 }
