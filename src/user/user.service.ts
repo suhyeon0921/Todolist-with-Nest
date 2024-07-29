@@ -1,14 +1,11 @@
-import {
-  BadRequestException,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Prisma, User } from '@prisma/client';
 import * as bcrypt from 'bcryptjs';
 import { UserRepository } from './repository/user.repository';
 import { JwtPayload, JwtToken } from '../common/type/jwt.type';
 import { generateToken, verifyToken } from '../common/util/jwt';
 import { RequestSignupDto } from './dto/request-signup.dto';
+import { CustomError } from '../common/error/custom-error';
 
 @Injectable()
 export class UserService {
@@ -24,21 +21,22 @@ export class UserService {
     phoneNumber?: string,
   ): void {
     if (!nickname) {
-      throw new BadRequestException('닉네임이 제공되지 않았습니다.');
+      throw new CustomError('error', '닉네임이 제공되지 않았습니다.');
     }
 
     if (!email && !phoneNumber) {
-      throw new BadRequestException(
+      throw new CustomError(
+        'error',
         '이메일 또는 휴대폰 번호가 제공되지 않았습니다.',
       );
     }
 
     if (email && !this.emailRegex.test(email)) {
-      throw new BadRequestException('유효한 이메일 형식이 아닙니다.');
+      throw new CustomError('error', '유효한 이메일 형식이 아닙니다.');
     }
 
     if (phoneNumber && !this.phoneNumberRegex.test(phoneNumber)) {
-      throw new BadRequestException('유효한 휴대폰 번호 형식이 아닙니다.');
+      throw new CustomError('error', '유효한 휴대폰 번호 형식이 아닙니다.');
     }
   }
 
@@ -56,13 +54,13 @@ export class UserService {
 
     if (existingUser) {
       if (existingUser.email === email) {
-        throw new BadRequestException('이미 가입한 이메일입니다.');
+        throw new CustomError('error', '이미 가입한 이메일입니다.');
       }
       if (existingUser.phoneNumber === phoneNumber) {
-        throw new BadRequestException('이미 가입한 휴대폰 번호입니다.');
+        throw new CustomError('error', '이미 가입한 휴대폰 번호입니다.');
       }
       if (existingUser.nickname === nickname) {
-        throw new BadRequestException('이미 사용 중인 닉네임입니다.');
+        throw new CustomError('error', '이미 사용 중인 닉네임입니다.');
       }
     }
   }
@@ -92,7 +90,7 @@ export class UserService {
     });
 
     if (!user) {
-      throw new UnauthorizedException('해당 유저를 찾을 수 없습니다.');
+      throw new CustomError('error', '해당 유저를 찾을 수 없습니다.');
     }
 
     const isPasswordValid: boolean = await bcrypt.compare(
@@ -101,7 +99,7 @@ export class UserService {
     );
 
     if (!isPasswordValid) {
-      throw new UnauthorizedException('비밀번호가 일치하지 않습니다.');
+      throw new CustomError('error', '비밀번호가 일치하지 않습니다.');
     }
 
     // JWT 페이로드 생성
@@ -134,7 +132,7 @@ export class UserService {
         );
 
       if (!storedUser) {
-        throw new UnauthorizedException('유효하지 않은 리프레시 토큰입니다.');
+        throw new CustomError('error', '유효하지 않은 리프레시 토큰입니다.');
       }
 
       const accessToken: string = generateToken(
@@ -148,7 +146,7 @@ export class UserService {
 
       return { accessToken };
     } catch (error) {
-      throw new UnauthorizedException('유효하지 않은 리프레시 토큰입니다.');
+      throw new CustomError('error', '유효하지 않은 리프레시 토큰입니다.');
     }
   }
 

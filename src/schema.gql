@@ -41,12 +41,25 @@ type TaskCountDto {
 }
 
 type Query {
-  getAllUsers: [User!]!
+  getAllUsers: UserResponseType!
   tasks: TaskResponseType!
   taskCount: TaskResponseType!
 }
 
-union ResponseType = TaskSuccessResponse | TaskErrorResponse
+union UserResponseType = UserSuccessResponse | UserErrorResponse
+
+type UserSuccessResponse {
+  status: String!
+  data: User
+  users: [User!]
+  jwtToken: JwtToken
+}
+
+type UserErrorResponse {
+  status: String!
+  message: String!
+}
+
 union TaskResponseType = TaskSuccessResponse | TaskErrorResponse
 
 type TaskSuccessResponse {
@@ -62,9 +75,9 @@ type TaskErrorResponse {
 }
 
 type Mutation {
-  signup(data: RequestSignupDto!): User!
-  login(data: RequestLoginDto!): JwtToken!
-  refresh(data: RequestRefreshAccessTokenDto!): JwtToken!
+  signup(data: RequestSignupDto!): UserResponseType!
+  login(data: RequestLoginDto!): UserResponseType!
+  refresh(data: RequestRefreshAccessTokenDto!): UserResponseType!
   createTask(data: RequestTaskDto!): TaskResponseType!
   updateTask(data: RequestUpdateTaskDto!): TaskResponseType!
   deleteTask(data: TaskIdDto!): TaskResponseType!
