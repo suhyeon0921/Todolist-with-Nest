@@ -1,0 +1,117 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+  id: Int!
+  email: String
+  phoneNumber: String
+  password: String!
+  fullName: String!
+  nickname: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type JwtToken {
+  accessToken: String!
+  refreshToken: String
+}
+
+type Task {
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+  id: Int!
+  content: String!
+  isDone: Boolean!
+  user: User
+  userId: Int
+}
+
+type TaskCountDto {
+  completedTaskCount: Int!
+  totalTaskCount: Int!
+}
+
+type Query {
+  getAllUsers: UserResponseType!
+  tasks: TaskResponseType!
+  taskCount: TaskResponseType!
+}
+
+union UserResponseType = UserSuccessResponse | UserErrorResponse
+
+type UserSuccessResponse {
+  status: String!
+  data: User
+  users: [User!]
+  jwtToken: JwtToken
+}
+
+type UserErrorResponse {
+  status: String!
+  message: String!
+}
+
+union TaskResponseType = TaskSuccessResponse | TaskErrorResponse
+
+type TaskSuccessResponse {
+  status: String!
+  data: Task
+  tasks: [Task!]
+  taskCount: TaskCountDto
+}
+
+type TaskErrorResponse {
+  status: String!
+  message: String!
+}
+
+type Mutation {
+  signup(data: RequestSignupDto!): UserResponseType!
+  login(data: RequestLoginDto!): UserResponseType!
+  refresh(data: RequestRefreshAccessTokenDto!): UserResponseType!
+  createTask(data: RequestTaskDto!): TaskResponseType!
+  updateTask(data: RequestUpdateTaskDto!): TaskResponseType!
+  deleteTask(data: TaskIdDto!): TaskResponseType!
+  completeTask(data: TaskIdDto!): TaskResponseType!
+  uncompleteTask(data: TaskIdDto!): TaskResponseType!
+}
+
+input RequestSignupDto {
+  email: String
+  phoneNumber: String
+  password: String!
+  fullName: String!
+  nickname: String!
+}
+
+input RequestLoginDto {
+  email: String
+  phoneNumber: String
+  password: String!
+}
+
+input RequestRefreshAccessTokenDto {
+  refreshToken: String!
+}
+
+input RequestTaskDto {
+  content: String!
+}
+
+input RequestUpdateTaskDto {
+  id: Int!
+  content: String!
+}
+
+input TaskIdDto {
+  id: Int!
+}
